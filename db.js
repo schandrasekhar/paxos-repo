@@ -7,7 +7,7 @@ db.save = function(key, data) {
 };
 
 db.get = function(key) {
-    return db[key];
+    return db[key] || null;
 };
 
 db.delete = function(key) {
