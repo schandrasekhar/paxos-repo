@@ -1,11 +1,8 @@
 const db = {};
 
 
-db.save = function(data) {
-    const keys = Object.keys(data);
-    keys.forEach(function(key) {
-        db[key] = data[key];
-    });
+db.save = function(key, data) {
+    db[key] = data;
     return true;
 };
 

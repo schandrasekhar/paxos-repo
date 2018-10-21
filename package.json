@@ -1,8 +1,14 @@
 {
-  "name": "paxos repo",
+  "name": "paxos-repo",
   "description": "paxos repo",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "express": "^4.16.4"
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
+    "express": "^4.16.4",
+    "mocha": "^5.2.0"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
   }
 }

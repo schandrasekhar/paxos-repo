@@ -1,43 +1,32 @@
-var express = require('express');
-var db = require('./db');
-var bodyParser = require('body-parser');
-const crypto = require('crypto');
+const express = require('express');
+const db = require('./db');
+const bodyParser = require('body-parser');
+const sha = require('./sha');
 
 
-var port = 3000;
-var app = express();
+const port = 3000;
+const app = express();
 
-const createSha = function(data) {
-    try {
-        const msg = data.toString();
-        return crypto.createHash('sha256').update(msg, 'utf8').digest('hex');
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
-    
-};
 
-const storeInDb = function(sha, message) {
-    const data = {};
-    data[sha] = message;
-    return db.save(data);
-};
-
+/*
+    Middleware for routes
+*/
+//middleware to parse the payload in POST request
 app.use(bodyParser.json());
 
-//to serve static files
-app.use(express.static(__dirname + '/build/'));
 
+/*
+    This creates and returns in the response body a sha256 `key` with the given `message`
+*/
 app.post('/messages', function(req, res) {
     const message = req.body.message;
     if (message) {
-        const sha = createSha(message);
-        if (sha) {
+        const shaKey = sha.create(message);
+        if (shaKey) {
             const payload = {
-                "digest": sha
+                "digest": shaKey
             };
-            storeInDb(sha, message);
+            db.save(shaKey, message);
             return res.send(payload);
         }
         return res.status(500).send('error occurred');
@@ -46,6 +35,9 @@ app.post('/messages', function(req, res) {
 });
 
 
+/*
+    This retrieves the respective `message` given a sha256 `key`
+*/
 app.get('/messages/:sha', function(req, res) {
     const sha = req.params.sha;
     const message = db.get(sha);
@@ -59,6 +51,8 @@ app.get('/messages/:sha', function(req, res) {
 });
 
 
-app.listen(3000, function() {
-    console.log('Example app listening on port 3000!');
+app.listen(port, function() {
+    console.log('Example app listening on port ' + port );
 });
+
+module.exports = app;
