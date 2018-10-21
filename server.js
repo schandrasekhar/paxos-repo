@@ -20,6 +20,7 @@ const app = express();
         The pool configuration can be tweaked for the required rps from a single box.
     5. The box handling the requests can be different from the box handling the hashing so each component can be fine grained
     control over scaling can be achieved as per need.
+    6. I have used an in memory hashmap for saving the hashes, a redis cache (or) a persistent database can be used based on the usecase
 */
 
 

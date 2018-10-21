@@ -152,9 +152,8 @@ const max = parseInt(args[2], 10);
 /*
     In memory object use case
 */
-// const pair = getGifts.findPair(data, max);
-// console.log(pair);
-// return;
+const pair = getGifts.findPair(data, max);
+console.log(pair);
 
 
 /*

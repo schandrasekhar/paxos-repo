@@ -22,7 +22,6 @@ expect(typeof pair).toBe('object');
 expect(pair).toMatchObject({ Detergent: 1000, Headphones: 1400 });
 
 
-
 //maximum use case
 pair = getGifts.findPair(mockdata, 500000);
 expect(typeof pair).toBe('object');
