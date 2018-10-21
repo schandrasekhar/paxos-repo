@@ -14,6 +14,8 @@
         set pair = (pair[1], N)
 */
 
+const fs = require("fs");
+var LineByLineReader = require('line-by-line');
 
 var data = {
     "Candy Bar": 500,
@@ -43,9 +45,9 @@ var createPair = function(oldPair, key, value, index) {
 };
 
 
-var findPair = function(data, max) {
+var findPair = function(data, pair, max) {
     const keys = Object.keys(data);
-    let pair = {};
+    pair = pair || {};
     for (var key in data) {
         const pairKeys = Object.keys(pair);
         if (pairKeys.length == 0) {
@@ -58,15 +60,64 @@ var findPair = function(data, max) {
             break;
         }
     }
-    if (Object.getOwnPropertyNames(pair).length < 2) {
-        return "Not possible";
-    }
     return pair;
 };
 
 
+var concurrentArray = [];
+
+var getPair = function(max, pair) {
+    pair = pair || {};
+    const obj = concurrentArray.shift();
+    if (obj) {
+        pair = findPair(obj, pair, max);
+        setTimeout(function() {
+            getPair(max, pair);
+        }, 100);
+    } else {
+        if (Object.getOwnPropertyNames(pair).length < 2) {
+            console.log("Not possible");
+            return;
+        }
+        console.log(pair);
+    }
+};
+
+
+var findPairStream = function(max) {
+    var lr = new LineByLineReader('./prices.txt');
+    lr.on('line', function(line) {
+        const arr = line.split(',');
+        const obj = {};
+        obj[arr[0]] = parseInt(arr[1], 10);
+        concurrentArray.push(obj);
+    });
+    lr.on('end', function() {
+        concurrentArray.push(null);
+    });
+};
+
+
 const args = process.argv;
-console.log(findPair(data, parseInt(args[2], 10)));
+const max = parseInt(args[2], 10);
+
+/*
+    In memory object use case
+*/
+// const pair = findPair(data, parseInt(args[2], 10)));
+// if (Object.getOwnPropertyNames(pair).length < 2) {
+//     return "Not possible";
+// }
+// return pair;
+
+
+/*
+    File streaming use case
+*/
+findPairStream();
+setTimeout(function() {
+    getPair(max);
+}, 10);
 
 
 

@@ -3,7 +3,8 @@
   "description": "paxos repo",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "line-by-line": "^0.1.6"
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha"
