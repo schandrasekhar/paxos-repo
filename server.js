@@ -7,6 +7,21 @@ const sha = require('./sha');
 const port = 3000;
 const app = express();
 
+/*
+    Notes:
+    Possible Bottlenecks
+    1. If the rps is a lot the app can to scaled horizontally.
+    2. If the string is very big, then the hash can be handed of to a off stage job. The client can keep polling the server
+        for the result or in case of web sockets the server can respond back with the data when available. Another optimization
+        can be to scale the app horizontally. A restriction on the string size can also be enforced so as the client does not
+        abuse the micro service.
+    3. In case of more users the hardware can also be upgraded (if possible) to handle more rps
+    4. Another optimization can be to spawn a pool of worker threads that do hashing, so as to handle peak loads.
+        The pool configuration can be tweaked for the required rps from a single box.
+    5. The box handling the requests can be different from the box handling the hashing so each component can be fine grained
+    control over scaling can be achieved as per need.
+*/
+
 
 /*
     Middleware for routes
