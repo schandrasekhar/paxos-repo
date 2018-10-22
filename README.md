@@ -19,6 +19,8 @@ payload is
 GET url
 `/messages/:hash`
 
+I have added test cases which are in `paxos-repo/test/` directory
+
 
 
 ## Example 2
@@ -33,3 +35,5 @@ To change the amount
 `vi package.json` and update the amount for the `gifts` script command with the required amount
 
 For now the in memory model use case is uncommented, to see the stream use case one uncomment that one to print the result
+
+I have added test cases which are in `paxos-repo/gifts-example/find-pair-test.js` file
